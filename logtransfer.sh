@@ -1,20 +1,14 @@
 #!/bin/sh
 
 #Initialization
-##Config file
-conf=logtransfer.conf
-s3bucket=oglogs
-s3mount=/tmp/amazons3
+conf=logtransfer.conf #Config file
+s3bucket=oglogs #Amazon S3 bucket name
+s3mount=/tmp/amazons3 #Mount point for Amazon bucket
 
-#loading up parameters from config file
+#Loading up parameters from config file
 source ./$conf
-#s=$(<$conf)
-#set -- $s
-#backuptype=$1
-#hostname=$2
-#retention=$3
 
-#making sure bucket is mounted
+#Making sure bucket is mounted
 if grep -qs '/tmp/amazons3' /proc/mounts; then
 	echo "It's mounted"
 elif [ -d "$s3mount" ]; then
