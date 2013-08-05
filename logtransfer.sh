@@ -24,4 +24,49 @@ elif [ ! -d "$s3mount" ]; then
 	echo "Mounting......"
 	s3fs $s3bucket $s3mount || eval 'echo "Unable to mount S3 Bucket. Failed command s3fs $s3bucket $s3mount" 1>&2; exit 1'
 fi
+
+#Backup Types
+#1) Web Server Nginx Logs
+#2) Web Server Website Logs
+#3) ABP Server Logs
+#4) ABP Server Tomcat Logs
+#5) MySQL Backups
+#6) Custom folder. Path set in custom_foler in $conf
+
+#Determine backup types needed.
 echo $backuptype
+
+#Type 3 rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
+
+
+transfer() {
+if [ -z $1 ]
+	#Errs on no parameters passed
+	then
+	echo "No Parameters passed to function"
+	return 0
+	else
+	echo "Backuptype = 1"
+fi
+if [ $1 = 2 ]
+	then
+	echo "Backuptype = 2"
+fi
+if [ $1 = 3 ]
+	then
+	echo "Backuptype = 3"
+fi
+if [ $1 = 4 ]
+	then
+	echo "Backuptype = 4"
+fi
+if [ $1 = 5 ]
+	then
+	echo "Backuptype = 5"
+fi
+if [ $1 = 6 ]
+	then
+	echo "Backuptype = 6"
+fi
+}
+}
