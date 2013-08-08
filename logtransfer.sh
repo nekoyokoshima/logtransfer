@@ -50,6 +50,15 @@ fi
 if [ $1 = 2 ]
 	then
 	echo "Backuptype = 2"
+	for d in "/var/www/"*
+		do
+			echo $d;
+			echo "$d";
+			echo $(basename "$d");
+			rsync-azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' $d/log/old/ /tmp/amazons3/$hostname/betrails/$(basename "$d")
+		done
+	#get number of folders in array
+	#for $i in array rsync <options> /var/www/array[@] /tmp/amazons3/$hostname/betrails/array[@]
 fi
 if [ $1 = 3 ]
 	then
