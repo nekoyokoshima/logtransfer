@@ -45,17 +45,19 @@ fi
 if [ $1 = 1 ]
 	then
 	echo "Backuptype = 1"
+	mkdir -p $s3mount/$hostname ##Create root folder if it does not exist
 	rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
 fi
 if [ $1 = 2 ]
 	then
 	echo "Backuptype = 2"
+	mkdir -p $s3mount/$hostname/betrails ##Create Betrails folder if it does not exist
 	for d in "/var/www/"*
 		do
 			echo $d;
 			echo "$d";
 			echo $(basename "$d");
-			rsync-azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' $d/log/old/ /tmp/amazons3/$hostname/betrails/$(basename "$d")
+			rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' $d/log/old/ /tmp/amazons3/$hostname/betrails/$(basename "$d")
 		done
 	#get number of folders in array
 	#for $i in array rsync <options> /var/www/array[@] /tmp/amazons3/$hostname/betrails/array[@]
@@ -79,11 +81,11 @@ fi
 }
 
 #Determine backup types needed.
+mdkir -p $s3mount/$hostname ##Create root folder if it does not exist
+
 echo $backuptype
 IFS=' ' b_split=($backuptype)
-echo ;
-echo "Split"
 for i in ${b_split[@]}
-do 
-transfer $i
-done
+	do 
+	transfer $i #calling transfer function accordingly
+	done
