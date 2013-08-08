@@ -33,20 +33,19 @@ fi
 #5) MySQL Backups
 #6) Custom folder. Path set in custom_foler in $conf
 
-#Determine backup types needed.
-echo $backuptype
 
-#Type 3 rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
-
-
+#Function to do the actual transfer depending on the backuptype
 transfer() {
 if [ -z $1 ]
 	#Errs on no parameters passed
 	then
 	echo "No Parameters passed to function"
 	return 0
-	else
+fi
+if [ $1 = 1 ]
+	then
 	echo "Backuptype = 1"
+	rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
 fi
 if [ $1 = 2 ]
 	then
@@ -69,4 +68,13 @@ if [ $1 = 6 ]
 	echo "Backuptype = 6"
 fi
 }
-}
+
+#Determine backup types needed.
+echo $backuptype
+IFS=' ' b_split=($backuptype)
+echo ;
+echo "Split"
+for i in ${b_split[@]}
+do 
+transfer $i
+done
