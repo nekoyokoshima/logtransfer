@@ -4,7 +4,7 @@
 conf=logtransfer.conf #Config file
 s3bucket=oglogs #Amazon S3 bucket name
 s3mount=/tmp/amazons3 #Mount point for Amazon bucket
-
+s3cmd_opts="--multipart-chunk-size-mb=1024"
 #Loading up parameters from config file
 source ./$conf
 
@@ -77,13 +77,10 @@ fi
 if [ $1 = 6 ] #Custom folder. Path set in custom_foler in $conf
 	then
 	echo "Backuptype = 6"
-	#list
-	find . -maxdepth 1 -type f
-	#backup
-	for item in $list
-	do
-	s3cmd
-	done
+	for mysqllist in `find $mysql_path -maxdepth 1 -type f`
+		do
+			s3cmd $s3cmd_opts sync $mysql_path s3://oglogs/mysql/2013/$kukki/
+		done
 	#deletion
 fi
 }
