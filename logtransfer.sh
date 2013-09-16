@@ -42,13 +42,13 @@ if [ -z $1 ]
 	echo "No Parameters passed to function"
 	return 0
 fi
-if [ $1 = 1 ]
+if [ $1 = 1 ] #Web Server Nginx Logs
 	then
 	echo "Backuptype = 1"
 	mkdir -p $s3mount/$hostname ##Create root folder if it does not exist
 	rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
 fi
-if [ $1 = 2 ]
+if [ $1 = 2 ] #Web Server Website Logs
 	then
 	echo "Backuptype = 2"
 	mkdir -p $s3mount/$hostname/betrails ##Create Betrails folder if it does not exist
@@ -62,21 +62,29 @@ if [ $1 = 2 ]
 	#get number of folders in array
 	#for $i in array rsync <options> /var/www/array[@] /tmp/amazons3/$hostname/betrails/array[@]
 fi
-if [ $1 = 3 ]
+if [ $1 = 3 ] #ABP Server Logs
 	then
 	echo "Backuptype = 3"
 fi
-if [ $1 = 4 ]
+if [ $1 = 4 ] #ABP Server Tomcat Logs
 	then
 	echo "Backuptype = 4"
 fi
-if [ $1 = 5 ]
+if [ $1 = 5 ] #MySQL Backups
 	then
 	echo "Backuptype = 5"
 fi
-if [ $1 = 6 ]
+if [ $1 = 6 ] #Custom folder. Path set in custom_foler in $conf
 	then
 	echo "Backuptype = 6"
+	#list
+	find . -maxdepth 1 -type f
+	#backup
+	for item in $list
+	do
+	s3cmd
+	done
+	#deletion
 fi
 }
 
