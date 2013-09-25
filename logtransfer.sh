@@ -25,6 +25,15 @@ elif [ ! -d "$s3mount" ]; then
 	s3fs $s3bucket $s3mount || eval 'echo "Unable to mount S3 Bucket. Failed command s3fs $s3bucket $s3mount" 1>&2; exit 1'
 fi
 
+#Making sure s3cmd is installed and appropriate version
+for cmd in s3cmd; do
+   [[ $("$cmd" --version) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
+   if ! awk -v ver="$version" 'BEGIN { if (ver < 1.5) exit 1; }'; then
+      echo "ERROR: %s version 1.5 or higher required\n" "$cmd"
+      echo "Download it from http://s3tools.org/s3cmd"
+   fi
+done
+
 #Backup Types
 #1) Web Server Nginx Logs
 #2) Web Server Website Logs
@@ -62,10 +71,19 @@ if [ $1 = 2 ] #Web Server Website Logs
 	#get number of folders in array
 	#for $i in array rsync <options> /var/www/array[@] /tmp/amazons3/$hostname/betrails/array[@]
 fi
+
+
 if [ $1 = 3 ] #ABP Server Logs
 	then
 	echo "Backuptype = 3"
+	IFS=' ' b_split=($abp_path)
+	for abp in ${b_split[@]}
+		do 
+			s3cmd sync -v $s3cmd_opts $abp s3://$s3bucket/$hostname/ABPServerLogs/
+		done
 fi
+
+
 if [ $1 = 4 ] #ABP Server Tomcat Logs
 	then
 	echo "Backuptype = 4"
