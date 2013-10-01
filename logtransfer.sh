@@ -11,8 +11,9 @@ source ./$conf
 for cmd in s3cmd; do
    [[ $("$cmd" --version) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
    if ! awk -v ver="$version" 'BEGIN { if (ver < 1.5) exit 1; }'; then
-      echo "ERROR: %s version 1.5 or higher required\n" "$cmd"
+      echo -e "ERROR: %s version 1.5 or higher required\n" "$cmd"
       echo "Download it from http://s3tools.org/s3cmd"
+      exit 1
    fi
 done
 
