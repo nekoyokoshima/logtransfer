@@ -18,7 +18,7 @@ done
 
 #Backup Types
 #1) Web Server Nginx Logs
-#2) Web Server Website Logs
+#2) Web Application Logs
 #3) ABP Server Logs
 #4) ABP Server Tomcat Logs
 #5) MySQL Backups
@@ -37,21 +37,23 @@ fi
 if [ $1 = 1 ] #Web Server Nginx Logs
 	then
 	echo "Backuptype = 1"
-	rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' /var/log/nginx/ /tmp/amazons3/$hostname/nginx
+	IFS=' ' b_split=($nginx_path)
+	for nginx in ${b_split[@]}
+		do
+			s3cmd sync -v $s3cmd_opts $nginx s3://$s3bucket/$hostname/WebServerLogs/
+		done
+	#deletion
 fi
 
-if [ $1 = 2 ] #Web Server Website Logs
+if [ $1 = 2 ] #Web Application Logs
 	then
 	echo "Backuptype = 2"
-	for d in "/var/www/"*
+	for wwwdir in "/var/www/*"
 		do
-			echo $d;
-			echo "$d";
-			echo $(basename "$d");
-			rsync -azv --human-readable --progress  --bwlimit=$bwlimit --include '*.gz' --exclude '*' $d/log/old/ /tmp/amazons3/$hostname/betrails/$(basename "$d")
+			echo $wwwdir;
+			s3cmd sync -v $s3cmd_opts $wwwdir/log/old s3://$s3bucket/$hostname/WebAppLogs/
 		done
-	#get number of folders in array
-	#for $i in array rsync <options> /var/www/array[@] /tmp/amazons3/$hostname/betrails/array[@]
+	#deleteion
 fi
 
 if [ $1 = 3 ] #ABP Server Logs
