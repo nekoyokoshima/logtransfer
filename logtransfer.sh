@@ -52,7 +52,7 @@ if [ $1 = 2 ] #Web Application Logs
 	for wwwdir in "/var/www/*"
 		do
 			echo $wwwdir;
-			s3cmd sync -v $s3cmd_opts $wwwdir/log/old s3://$s3bucket/$hostname/WebAppLogs/
+			s3cmd sync -v $s3cmd_opts $wwwdir/log/old/ s3://$s3bucket/$hostname/WebAppLogs/
 		done
 	#deleteion
 fi
