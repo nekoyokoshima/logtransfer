@@ -2,18 +2,28 @@
 
 #Initialization
 conf=logtransfer.conf #Config file
-s3bucket=oglogs #Amazon S3 bucket name
-s3cmd_opts="--multipart-chunk-size-mb=1024"
-#Loading up parameters from config file
 source ./$conf
+
+#Colors
+red='\e[0;31m'
+yellow='\e[1;33m'
+green='\e[1;32m'
+blue='\e[1;34m'
+NC='\e[0m' # No Color
 
 #Making sure s3cmd is installed and appropriate version
 for cmd in s3cmd; do
    [[ $("$cmd" --version) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
    if ! awk -v ver="$version" 'BEGIN { if (ver < 1.5) exit 1; }'; then
-      echo -e "ERROR: %s version 1.5 or higher required\n" "$cmd"
-      echo "Download it from http://s3tools.org/s3cmd"
-      exit 1
+      echo -e "ERROR: $cmd version 1.5 or higher required\n"
+      read -p "Would you like to download and install s3cmd?" -n 1 -r
+      if [[ $REPLY =~ ^[Yy]$ ]]
+      	then
+      	wget -P /tmp/ http://goo.gl/fP6q3j
+      	tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/s3cmd
+      	tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/S3
+      	cp ~/bin/logtransfer/s3cfg ~/.s3cfg
+	  fi
    fi
 done
 
