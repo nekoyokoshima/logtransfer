@@ -82,7 +82,7 @@ if [ $1 = 2 ] #Web Application Logs
 		do
 			echo -e "${red}$wwwdir$NC"
 			folder=${wwwdir#*www/}
-			s3cmd sync -v $s3cmd_opts $wwwdir/log/old/ s3://$s3bucket/$hostname/WebAppLogs/$folder
+			s3cmd sync -v $s3cmd_opts $wwwdir/log/old/ s3://$s3bucket/$hostname/WebAppLogs/$folder/
 		done
 	#deleteion
 fi
