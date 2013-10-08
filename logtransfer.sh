@@ -13,18 +13,37 @@ NC='\e[0m' # No Color
 
 #Making sure s3cmd is installed and appropriate version
 for cmd in s3cmd; do
-   [[ $("$cmd" --version) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
-   if ! awk -v ver="$version" 'BEGIN { if (ver < 1.5) exit 1; }'; then
-      echo -e "ERROR: $cmd version 1.5 or higher required\n"
-      read -p "Would you like to download and install s3cmd?" -n 1 -r
-      if [[ $REPLY =~ ^[Yy]$ ]]
-      	then
-      	wget -P /tmp/ http://goo.gl/fP6q3j
-      	tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/s3cmd
-      	tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/S3
-      	cp ~/bin/logtransfer/s3cfg ~/.s3cfg
-	  fi
-   fi
+	[[ $("$cmd" --version 2>/dev/null) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
+	if ! awk -v ver="$version" 'BEGIN { if (ver < 1.5) exit 1; }'; then
+		echo -e "ERROR: $cmd version 1.5 or higher required\n"
+#Attempting install of appropiate version     
+		read -p "Would you like to download and install s3cmd? (y/[n])" -n 1 -r
+		echo ""
+		if [[ $REPLY =~ ^[Yy]$ ]]
+		then
+			wget -P /tmp/ http://goo.gl/fP6q3j
+			tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/s3cmd
+			tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/S3
+			cp ~/bin/logtransfer/s3cfg ~/.s3cfg
+		fi
+	fi
+
+#Check if s3cmd installed properly
+	s3cmd ls &>/dev/null
+	retval=$?
+	if [[ "$retval" == "0" ]]
+		then echo -e "s3cmd tested working ok\n"
+		else 
+		echo -e "Something went wrong\n"
+		echo "Relevant Info:"
+		echo -e "${red}which s3cmd output"
+		echo -e "------------------$NC"
+		which s3cmd
+		echo -e "${red}s3cmd ls output"
+		echo -e "---------------$NC"
+		s3cmd ls
+		exit 1
+	fi	
 done
 
 #Backup Types
