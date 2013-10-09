@@ -10,7 +10,7 @@ yellow='\e[1;33m'
 green='\e[1;32m'
 blue='\e[1;34m'
 NC='\e[0m' # No Color
-
+##------PRE-REQUISITE CHECKING-------##
 #Making sure s3cmd is installed and appropriate version
 for cmd in s3cmd; do
 	[[ $("$cmd" --version 2>/dev/null) =~ ([0-9][.][0-9.]*) ]] && version="${BASH_REMATCH[1]}"
@@ -21,7 +21,7 @@ for cmd in s3cmd; do
 		echo ""
 		if [[ $REPLY =~ ^[Yy]$ ]]
 		then
-			wget -P /tmp/ http://goo.gl/vvJKT7 -o s3cmd-1.5.0-alpha3.tar.gz  #http://goo.gl/fP6q3j <-- This is 1.5.0-alpha1
+			wget http://goo.gl/vvJKT7 -O /tmp/s3cmd-1.5.0-alpha3.tar.gz  #http://goo.gl/fP6q3j <-- This is 1.5.0-alpha1
 			tar -xvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/s3cmd
 			tar -zxvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/S3
 			cp ~/bin/logtransfer/s3cfg ~/.s3cfg
@@ -29,9 +29,23 @@ for cmd in s3cmd; do
 		fi
 	fi
 
-#Check if s3cmd installed properly
-	s3cmd ls &>/dev/null
+#Check if python-magic is installed.
+py=`find /usr -type f -name magic.so`
+if [[ -z "$py" ]]
+	then printf "Installing python-magic....."
+	yum install -y python-magic &>/dev/null
 	retval=$?
+		if [[ "$retval" == "0" ]]
+			then printf "OK\n"
+			else echo -e "${red}Error$NC"
+		fi
+	else
+	printf "python-magic already installed\n"
+fi
+
+#Check if s3cmd installed properly
+s3cmd ls &>/dev/null
+retval=$?
 	if [[ "$retval" == "0" ]]
 		then echo -e "s3cmd tested working ok\n"
 		else 
@@ -46,6 +60,7 @@ for cmd in s3cmd; do
 		exit 1
 	fi	
 done
+##----END PRE-REQUISITE CHECKING----##
 
 #Backup Types
 #1) Web Server Nginx Logs
