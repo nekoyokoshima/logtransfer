@@ -21,10 +21,11 @@ for cmd in s3cmd; do
 		echo ""
 		if [[ $REPLY =~ ^[Yy]$ ]]
 		then
-			wget -P /tmp/ http://goo.gl/fP6q3j
-			tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/s3cmd
-			tar -zxvf /tmp/s3cmd-1.5.0-alpha1.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-1.5.0-alpha1/S3
+			wget -P /tmp/ http://goo.gl/vvJKT7 -o s3cmd-1.5.0-alpha3.tar.gz  #http://goo.gl/fP6q3j <-- This is 1.5.0-alpha1
+			tar -xvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/s3cmd
+			tar -zxvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/S3
 			cp ~/bin/logtransfer/s3cfg ~/.s3cfg
+			rm -f /tmp/s3cmd-1.5.0-alpha3.tar.gz
 		fi
 	fi
 
