@@ -70,7 +70,7 @@ if [ $1 = 1 ] #Web Server Nginx Logs
 	IFS=' ' b_split=($nginx_path)
 	for nginx in ${b_split[@]}
 		do
-			s3cmd sync -v $s3cmd_opts $nginx s3://$s3bucket/$hostname/WebServerLogs/
+			s3cmd sync -v $s3cmd_opts --exclude '*.log' $nginx s3://$s3bucket/$hostname/WebServerLogs/ #the exclude is required so it does not copy current active log
 		done
 	#deletion
 fi
