@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd /root/bin/logtransfer
+
 #Initialization
 conf=logtransfer.conf #Config file
 source ./$conf
