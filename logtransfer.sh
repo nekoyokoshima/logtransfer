@@ -1,4 +1,6 @@
 #!/bin/sh
+export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
+cd /root/bin/logtransfer
 
 #Initialization
 conf=logtransfer.conf #Config file
