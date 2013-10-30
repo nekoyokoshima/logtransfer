@@ -2,8 +2,6 @@
 export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
 cd /root/bin/logtransfer
 
-cd /root/bin/logtransfer
-
 #Initialization
 conf=logtransfer.conf #Config file
 source ./$conf
@@ -90,7 +88,7 @@ if [ $1 = 1 ] #Web Server Nginx Logs
 	IFS=' ' b_split=($nginx_path)
 	for nginx in ${b_split[@]}
 		do
-			s3cmd sync -v $s3cmd_opts --exclude '*.log' $nginx/old/ s3://$s3bucket/$hostname/WebServerLogs/ #the exclude is required so it does not copy current active log
+			s3cmd sync $s3cmd_opts --exclude '*.log' $nginx/old/ s3://$s3bucket/$hostname/WebServerLogs/ #the exclude is required so it does not copy current active log
 		done
 	#deletion
 fi
@@ -102,7 +100,7 @@ if [ $1 = 2 ] #Web Application Logs
 		do
 			echo -e "${red}$wwwdir$NC"
 			folder=${wwwdir#*www/}
-			s3cmd sync -v $s3cmd_opts $wwwdir/log/old/ s3://$s3bucket/$hostname/WebAppLogs/$folder/
+			s3cmd sync $s3cmd_opts $wwwdir/log/old/ s3://$s3bucket/$hostname/WebAppLogs/$folder/
 		done
 	#deleteion
 fi
@@ -113,7 +111,7 @@ if [ $1 = 3 ] #ABP Server Logs
 	IFS=' ' b_split=($abp_path)
 	for abp in ${b_split[@]}
 		do
-			s3cmd sync -v $s3cmd_opts $abp s3://$s3bucket/$hostname/ABPServerLogs/
+			s3cmd sync $s3cmd_opts $abp s3://$s3bucket/$hostname/ABPServerLogs/
 		done
 fi
 
