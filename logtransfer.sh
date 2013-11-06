@@ -120,6 +120,11 @@ fi
 if [ $1 = 4 ] #ABP Server Tomcat Logs
 	then
 	echo "Backuptype = 4"
+	IFS=' ' b_split=($tomcat_path)
+	for tomcat in ${b_split[@]}
+		do
+			s3cmd sync -v $s3cmd_opts $tomcat s3://$s3bucket/$hostname/ABPTomcatLogs/
+		done	
 fi
 
 if [ $1 = 5 ] #MySQL Backups
