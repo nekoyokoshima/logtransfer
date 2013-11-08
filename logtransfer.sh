@@ -117,7 +117,7 @@ if [ $1 = 3 ] #ABP Server Logs
                                         s3cmd sync $s3cmd_opts $abp s3://$s3bucket/$hostname/ABPServerLogs/$folder/
                                 done
                 else
-                        echo -e "${red}$abp$NC"
+                        echo -e "${red}$abp_path$NC"
                         s3cmd sync $s3cmd_opts $abp_path s3://$s3bucket/$hostname/ABPServerLogs/
         fi
 
