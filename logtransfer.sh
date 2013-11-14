@@ -129,7 +129,7 @@ if [ $1 = 4 ] #ABP Server Tomcat Logs
 	IFS=' ' b_split=($tomcat_path)
 	for tomcat in ${b_split[@]}
 		do
-			s3cmd sync -v $s3cmd_opts $tomcat s3://$s3bucket/$hostname/ABPTomcatLogs/
+			s3cmd sync $s3cmd_opts $tomcat s3://$s3bucket/$hostname/ABPTomcatLogs/
 		done	
 fi
 
