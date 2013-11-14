@@ -45,6 +45,19 @@ if [[ -z "$py" ]]
 	printf "python-magic already installed\n"
 fi
 
+#Auto-update Script if needed
+git fetch
+if [ "git log HEAD..origin/master --oneline" != 0 ]
+then
+        echo -e "${red}Script is scheduled for update$NC"
+        git pull || { echo >&2 "failed with $?"; exit 1; }
+        echo "/root/bin/logtransfer/logtransfer.sh >/dev/null" | at now + 1 minute
+        echo 'Exiting!'
+        exit
+else
+        echo 'Script is already up-to-date'
+fi
+
 #Check if s3cmd installed properly
 s3cmd ls &>/dev/null
 retval=$?
