@@ -49,7 +49,7 @@ fi
 local_commit=`git log -n 1 --pretty=format:"%H"`
 git fetch
 repo_commit=`git log origin/master | head -1 | awk {'print $2'}`
-if [ "$local_commit" -ne "$repo_commit" ]
+if [ "$local_commit" = "$repo_commit" ]
 then
         echo -e "${red}Script is scheduled for update$NC"
         git pull || { echo >&2 "failed with $?"; exit 1; }
