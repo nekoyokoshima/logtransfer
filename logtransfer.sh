@@ -46,8 +46,10 @@ if [[ -z "$py" ]]
 fi
 
 #Auto-update Script if needed
+local_commit=`git log -n 1 --pretty=format:"%H"`
 git fetch
-if [ "git log HEAD..origin/master --oneline" != 0 ]
+repo_commit=`git log origin/master | head -1 | awk {'print $2'}`
+if [ "$local_commit" -ne "$repo_commit" ]
 then
         echo -e "${red}Script is scheduled for update$NC"
         git pull || { echo >&2 "failed with $?"; exit 1; }
