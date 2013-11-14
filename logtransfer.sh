@@ -32,7 +32,7 @@ for cmd in s3cmd; do
 	fi
 
 #Check if python-magic is installed.
-py=`find /usr -type f -name magic.so`
+py=`find /usr/li* -type f -name magic.so`
 if [[ -z "$py" ]]
 	then printf "Installing python-magic....."
 	yum install -y python-magic &>/dev/null
@@ -156,7 +156,7 @@ if [ $1 = 5 ] #MySQL Backups
 	echo "Backuptype = 5"
 	for mysqllist in `find $mysql_path -maxdepth 1 -type f`
 		do
-			s3cmd $s3cmd_opts sync $mysql_path s3://oglogs/mysql/2013/$kukki/
+			#s3cmd sync $s3cmd_opts $mysql_path s3://oglogs/mysql/2013/$mysqllist/
 		done
 fi
 
