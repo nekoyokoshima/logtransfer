@@ -46,20 +46,18 @@ if [[ -z "$py" ]]
 fi
 
 #Auto-update Script if needed
-if [ "auto_update" = "1" ]
-	local_commit=`git log -n 1 --pretty=format:"%H"`
-	git fetch
-	repo_commit=`git log origin/master | head -1 | awk {'print $2'}`
-	if [ "$local_commit" != "$repo_commit" ]
-	then
-			echo -e "${red}Script is scheduled for update$NC"
-			git pull || { echo >&2 "failed with $?"; exit 1; }
-			echo "/root/bin/logtransfer/logtransfer.sh >/dev/null" | at now + 1 minute
-			echo 'Exiting!'
-			exit
-	else
-			echo 'Script is already up-to-date'
-	fi
+local_commit=`git log -n 1 --pretty=format:"%H"`
+git fetch
+repo_commit=`git log origin/master | head -1 | awk {'print $2'}`
+if [ "$local_commit" != "$repo_commit" ]
+then
+        echo -e "${red}Script is scheduled for update$NC"
+        git pull || { echo >&2 "failed with $?"; exit 1; }
+        echo "/root/bin/logtransfer/logtransfer.sh >/dev/null" | at now + 1 minute
+        echo 'Exiting!'
+        exit
+else
+        echo 'Script is already up-to-date'
 fi
 
 #Check if s3cmd installed properly
