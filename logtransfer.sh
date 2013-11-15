@@ -25,6 +25,18 @@ echo -n "Installing $1.........."
 fi
 }
 
+proccheck(){
+ps cax | grep $1 > /dev/null
+
+  if [ $? -eq 0 ]; then
+    echo "Process $1 is running."
+  else
+    echo "Process $1 is not running."
+    service $1 start
+    chkconfig $1 on
+  fi
+}
+
 #Colors
 red='\e[0;31m'
 yellow='\e[1;33m'
