@@ -26,12 +26,13 @@ fi
 }
 
 proccheck(){
+echo -n "Checking if $1 is running........"
 ps cax | grep $1 > /dev/null
 
   if [ $? -eq 0 ]; then
-    echo "Process $1 is running."
+    echo -e "${green}[OK]$NC"
   else
-    echo "Process $1 is not running."
+    echo -e "${red}[Staring]$NC"s
     service $1 start
     chkconfig $1 on
   fi
