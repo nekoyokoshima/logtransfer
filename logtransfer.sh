@@ -6,6 +6,25 @@ cd /root/bin/logtransfer
 conf=logtransfer.conf #Config file
 source ./$conf
 
+#Function to check if required rpm are installed
+rpmcheck() {
+echo -n "Checking for $1........"
+if rpm -qa | grep -Eq "^$1"; then
+        echo -e "${green}[OK]$NC"
+else
+        echo -e "${red}[failed]$NC"
+echo -n "Installing $1.........."
+        yum install -y $1 &>/dev/null
+        retval=$?
+                if [[ "$retval" == "0" ]]; then
+                        echo -e "${green}[OK]$NC"
+                else
+                        echo -e "${red}[failed]$NC"
+                        exit 1
+                fi
+fi
+}
+
 #Colors
 red='\e[0;31m'
 yellow='\e[1;33m'
@@ -80,25 +99,6 @@ done
 #4) ABP Server Tomcat Logs
 #5) MySQL Backups
 #6) Custom folder. Path set in custom_foler in $conf
-
-rpmcheck() {
-#function to check if required rpm are installed
-echo -n "Checking for $1........"
-if rpm -qa | grep -Eq "^$1"; then
-        echo -e "${green}[OK]$NC"
-else
-        echo -e "${red}[failed]$NC"
-echo -n "Installing $1.........."
-        yum install -y $1 &>/dev/null
-        retval=$?
-                if [[ "$retval" == "0" ]]; then
-                        echo -e "${green}[OK]$NC"
-                else
-                        echo -e "${red}[failed]$NC"
-                        exit 1
-                fi
-fi
-}
 
 #Function to do the actual transfer depending on the backuptype
 transfer() {
