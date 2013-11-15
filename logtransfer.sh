@@ -32,7 +32,7 @@ ps cax | awk {'print $5'} | grep -E "^$1" > /dev/null
   if [ $? -eq 0 ]; then
     echo -e "${green}[OK]$NC"
   else
-    echo -e "${red}[Staring]$NC"s
+    echo -e "${red}[Staring]$NC"
     service $1 start
     chkconfig $1 on
   fi
