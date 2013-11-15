@@ -27,7 +27,7 @@ fi
 
 proccheck(){
 echo -n "Checking if $1 is running........"
-ps cax | grep $1 > /dev/null
+ps cax | awk {'print $5'} | grep -E "^$1" > /dev/null
 
   if [ $? -eq 0 ]; then
     echo -e "${green}[OK]$NC"
@@ -65,7 +65,7 @@ for cmd in s3cmd; do
 
 #Check for required RPMs (rpmcheck {package name})
 rpmcheck at
-proccheck at 
+proccheck atd 
 rpmcheck python-magic
 
 
