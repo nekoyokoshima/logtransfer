@@ -63,7 +63,8 @@ for cmd in s3cmd; do
 	fi
 
 #Check for required RPMs (rpmcheck {package name})
-rpmcheck at 
+rpmcheck at
+proccheck at 
 rpmcheck python-magic
 
 
