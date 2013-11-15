@@ -165,7 +165,7 @@ if [ $1 = 5 ] #MySQL Backups
 	echo "Backuptype = 5"
 	for mysqllist in `find $mysql_path -maxdepth 1 -type f`
 		do
-			#s3cmd sync $s3cmd_opts $mysql_path s3://oglogs/mysql/2013/$mysqllist/
+			echo $mysqllist #s3cmd sync $s3cmd_opts $mysql_path s3://oglogs/mysql/2013/$mysqllist/
 		done
 fi
 
