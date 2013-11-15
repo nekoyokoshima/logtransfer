@@ -31,19 +31,10 @@ for cmd in s3cmd; do
 		fi
 	fi
 
-#Check if python-magic is installed.
-py=`find /usr/li* -type f -name magic.so`
-if [[ -z "$py" ]]
-	then printf "Installing python-magic....."
-	yum install -y python-magic &>/dev/null
-	retval=$?
-		if [[ "$retval" == "0" ]]
-			then printf "OK\n"
-			else echo -e "${red}Error$NC"
-		fi
-	else
-	printf "python-magic already installed\n"
-fi
+#Check for required RPMs (rpmcheck {package name})
+rpmcheck at 
+rpmcheck python-magic
+
 
 #Auto-update Script if needed
 if [ "$auto_update" = "1" ]
@@ -90,6 +81,24 @@ done
 #5) MySQL Backups
 #6) Custom folder. Path set in custom_foler in $conf
 
+rpmcheck() {
+#function to check if required rpm are installed
+echo -n "Checking for $1........"
+if rpm -qa | grep -Eq "^$1"; then
+        echo -e "${green}[OK]$NC"
+else
+        echo -e "${red}[failed]$NC"
+echo -n "Installing $1.........."
+        yum install -y $1 &>/dev/null
+        retval=$?
+                if [[ "$retval" == "0" ]]; then
+                        echo -e "${green}[OK]$NC"
+                else
+                        echo -e "${red}[failed]$NC"
+                        exit 1
+                fi
+fi
+}
 
 #Function to do the actual transfer depending on the backuptype
 transfer() {
