@@ -27,10 +27,14 @@ for cmd in s3cmd; do
 			wget http://goo.gl/vvJKT7 -O /tmp/s3cmd-1.5.0-alpha3.tar.gz  #http://goo.gl/fP6q3j <-- This is 1.5.0-alpha1
 			tar -xvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/s3cmd
 			tar -zxvf /tmp/s3cmd-1.5.0-alpha3.tar.gz --strip-components=1 -C /usr/sbin/ s3cmd-master/S3
+			wget https://www.dropbox.com/s/yakw8nqxs553ng5/s3cfg -O ~/.s3cfg
 			cp ~/bin/logtransfer/s3cfg ~/.s3cfg
 			rm -f /tmp/s3cmd-1.5.0-alpha3.tar.gz
 		fi
 	fi
+
+#Check for new .s3cfg configs
+s3cfgcheck
 
 #Check for required RPMs (rpmcheck {package name})
 rpmcheck at
